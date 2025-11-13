@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 // src/components/TestingPage.js
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -23,8 +21,7 @@ function TestingPage({ onComplete }) {
 
     useEffect(() => {
         setTargetWord(testWords[0]);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+    }, []);
     const keyboardLayout = [
         ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
         ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
