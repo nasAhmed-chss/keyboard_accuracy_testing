@@ -8,6 +8,11 @@
      box-sizing: border-box;
    }
 
-   body {
-     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
-   }
+.hero-background {
+      background-image: url('./images/keyboard-4k.jpg'); /* Use the path relative to the public folder */
+      background-size: cover; /* Ensures the image covers the entire element */
+      background-position: center; /* Centers the image */
+      background-repeat: no-repeat; /* Prevents image repetition */
+      height: 100vh; /* Example: set height to full viewport height */
+      width: 100%; /* Ensure it takes full width */
+    }
