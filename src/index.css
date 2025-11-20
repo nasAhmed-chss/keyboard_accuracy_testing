@@ -1,6 +1,9 @@
 @tailwind base;
    @tailwind components;
    @tailwind utilities;
+.pt-safe {
+    padding-top: env(safe-area-inset-top);
+}
 
    * {
      margin: 0;

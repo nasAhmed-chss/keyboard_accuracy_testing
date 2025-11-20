@@ -22,6 +22,11 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
     useEffect(() => {
         setTargetWord(testWords[0]);
     }, []);
+    // Force page to load from the top on iPhone Safari
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
 
     const keyboardLayout = [
         ['q','w','e','r','t','y','u','i','o','p'],
