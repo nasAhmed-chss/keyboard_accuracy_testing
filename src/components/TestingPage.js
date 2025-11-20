@@ -219,12 +219,13 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                                             animate={{ scale }}
                                             onClick={() => handleKeyPress(key)}
                                             className="
-                                                uppercase font-semibold rounded-xl
-                                                text-gray-200 bg-[#ffffff15]
-                                                hover:bg-[#ffffff25]
-                                                backdrop-blur-lg shadow-md
-                                                transition-all
-                                            "
+                                            uppercase font-semibold rounded-xl
+                                            text-gray-200 
+                                            bg-[#1a1a1e] hover:bg-[#2a2a30]
+                                            shadow-md shadow-black/40
+                                            transition-all
+                                        "
+
                                             style={{
                                                 width: `${42 * scale}px`,
                                                 height: `${50 * scale}px`,
