@@ -1,9 +1,8 @@
-// src/components/TestingPage.js
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TEST_WORDS } from '../data/words';
 
-function TestingPage({ onComplete }) {
+function TestingPage({ onComplete, mode = 'adaptive' }) {
     const [currentWord, setCurrentWord] = useState('');
     const [targetWord, setTargetWord] = useState('');
     const [wordIndex, setWordIndex] = useState(0);
@@ -14,18 +13,19 @@ function TestingPage({ onComplete }) {
         startTime: Date.now(),
         keyErrors: {}
     });
+
     const [keySizes, setKeySizes] = useState({});
 
-    // Use first 20 words from big list (adjust if you want)
     const testWords = TEST_WORDS.slice(0, 20);
 
     useEffect(() => {
         setTargetWord(testWords[0]);
     }, []);
+
     const keyboardLayout = [
-        ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-        ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-        ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+        ['q','w','e','r','t','y','u','i','o','p'],
+        ['a','s','d','f','g','h','j','k','l'],
+        ['z','x','c','v','b','n','m']
     ];
 
     const handleKeyPress = (key) => {
@@ -46,8 +46,7 @@ function TestingPage({ onComplete }) {
             }
         }));
 
-        // Grow keys that are error-prone
-        if (!isCorrect && expectedChar) {
+        if (mode === 'adaptive' && !isCorrect && expectedChar) {
             setKeySizes((prev) => ({
                 ...prev,
                 [expectedChar]: Math.min((prev[expectedChar] || 1) + 0.1, 1.3)
@@ -58,9 +57,9 @@ function TestingPage({ onComplete }) {
             setTimeout(() => {
                 setCurrentWord('');
                 if (wordIndex < testWords.length - 1) {
-                    const nextIndex = wordIndex + 1;
-                    setWordIndex(nextIndex);
-                    setTargetWord(testWords[nextIndex]);
+                    const next = wordIndex + 1;
+                    setWordIndex(next);
+                    setTargetWord(testWords[next]);
                 } else {
                     handleFinishTest();
                 }
@@ -69,17 +68,18 @@ function TestingPage({ onComplete }) {
     };
 
     const handleFinishTest = () => {
-        const durationMinutes = (Date.now() - stats.startTime) / 1000 / 60;
+        const mins = (Date.now() - stats.startTime) / 1000 / 60;
+
         const wpm =
-            durationMinutes === 0
-                ? 0
-                : Math.round((stats.totalChars / 5) / durationMinutes);
+            mins === 0 ? 0 : Math.round((stats.totalChars / 5) / mins);
+
         const accuracy =
             stats.totalChars === 0
                 ? 100
                 : Math.round((stats.correctChars / stats.totalChars) * 100);
 
         onComplete({
+            mode,
             accuracy,
             wpm,
             errors: stats.errors,
@@ -87,93 +87,123 @@ function TestingPage({ onComplete }) {
         });
     };
 
-    const calculateAccuracy = () => {
-        if (stats.totalChars === 0) return 100;
-        return Math.round((stats.correctChars / stats.totalChars) * 100);
-    };
+    const calcAcc = () =>
+        stats.totalChars === 0
+            ? 100
+            : Math.round((stats.correctChars / stats.totalChars) * 100);
 
-    const calculateWPM = () => {
-        const duration = (Date.now() - stats.startTime) / 1000 / 60;
-        if (duration === 0) return 0;
-        return Math.round((stats.totalChars / 5) / duration);
+    const calcWPM = () => {
+        const mins = (Date.now() - stats.startTime) / 1000 / 60;
+        return mins === 0 ? 0 : Math.round((stats.totalChars / 5) / mins);
     };
 
     return (
         <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="min-h-screen flex flex-col items-center justify-center p-6"
+            className="
+                min-h-screen flex flex-col items-center justify-center p-6
+                bg-gradient-to-br from-[#1a0b2e] via-[#3d0c49] to-[#5e0b3a]
+                text-gray-200
+            "
         >
-            <div className="max-w-2xl w-full space-y-8">
+            <div className="max-w-2xl w-full space-y-10">
+
+                {/* Mode Label */}
+                <div className="text-center text-sm text-pink-300 tracking-wider opacity-80">
+                    {mode === 'baseline' ? "Baseline Typing Test" : "Adaptive Typing Test"}
+                </div>
+
                 {/* Progress */}
-                <div className="flex justify-between items-center">
-                    <div className="text-sm text-gray-600">
-                        Word {wordIndex + 1} of {testWords.length}
-                    </div>
+                <div className="flex justify-between items-center text-gray-300">
+                    <div>Word {wordIndex + 1} of {testWords.length}</div>
+
                     <div className="flex gap-2">
                         {testWords.map((_, idx) => (
                             <div
                                 key={idx}
-                                className={`w-2 h-2 rounded-full ${idx < wordIndex
-                                    ? 'bg-green-500'
-                                    : idx === wordIndex
-                                        ? 'bg-blue-500'
-                                        : 'bg-gray-300'
-                                    }`}
+                                className={`w-2 h-2 rounded-full ${
+                                    idx < wordIndex
+                                        ? 'bg-green-400'
+                                        : idx === wordIndex
+                                            ? 'bg-blue-400'
+                                            : 'bg-gray-600'
+                                }`}
                             />
                         ))}
                     </div>
                 </div>
 
-                {/* Target word */}
+                {/* Word Card */}
                 <motion.div
                     key={targetWord}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="bg-white/70 backdrop-blur-xl rounded-3xl p-8 shadow-xl text-center"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="
+                        bg-white/10 backdrop-blur-xl
+                        p-8 text-center rounded-3xl
+                        shadow-[0_0_25px_rgba(255,0,120,0.25)]
+                        border border-white/10
+                    "
                 >
-                    <p className="text-sm text-gray-600 mb-2">Type this word:</p>
-                    <div className="text-4xl font-bold text-gray-900 tracking-wider">
-                        {targetWord.split('').map((char, idx) => (
+                    <p className="text-sm text-gray-300">Type this word:</p>
+
+                    <div className="text-4xl font-bold tracking-wide mt-2">
+                        {targetWord.split('').map((char, i) => (
                             <span
-                                key={idx}
+                                key={i}
                                 className={
-                                    idx < currentWord.length
-                                        ? currentWord[idx] === char
-                                            ? 'text-green-600'
-                                            : 'text-red-600'
-                                        : 'text-gray-900'
+                                    i < currentWord.length
+                                        ? currentWord[i] === char
+                                            ? 'text-green-400'
+                                            : 'text-red-400'
+                                        : 'text-gray-100'
                                 }
                             >
                                 {char}
                             </span>
                         ))}
                     </div>
+
                     <div className="mt-4 text-2xl text-gray-400 min-h-8">
-                        {currentWord || '_'}
+                        {currentWord || "_"}
                     </div>
                 </motion.div>
 
-                {/* Keyboard */}
-                <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-xl">
+                {/* Keyboard Panel */}
+                <div
+                    className="
+                        bg-white/10 backdrop-blur-xl p-6 rounded-3xl
+                        shadow-[0_0_20px_rgba(0,0,0,0.3)] border border-white/10
+                    "
+                >
                     <div className="space-y-2">
-                        {keyboardLayout.map((row, rowIdx) => (
-                            <div key={rowIdx} className="flex justify-center gap-2">
+                        {keyboardLayout.map((row, r) => (
+                            <div key={r} className="flex justify-center gap-2">
                                 {row.map((key) => {
-                                    const scale = keySizes[key] || 1;
+                                    const scale = mode === 'adaptive'
+                                        ? keySizes[key] || 1
+                                        : 1;
+
                                     return (
                                         <motion.button
                                             key={key}
-                                            whileTap={{ scale: 0.9 }}
+                                            whileTap={{ scale: 0.85 }}
                                             animate={{ scale }}
                                             onClick={() => handleKeyPress(key)}
-                                            className="bg-gradient-to-br from-white to-gray-100 hover:from-blue-50 hover:to-purple-50 text-gray-800 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all uppercase"
+                                            className="
+                                                bg-gradient-to-br from-[#ffffff11] to-[#cccccc22]
+                                                text-gray-200 uppercase font-semibold
+                                                rounded-xl shadow-md hover:shadow-lg
+                                                hover:bg-[#ffffff22]
+                                                transition-all backdrop-blur-lg
+                                            "
                                             style={{
-                                                width: `${40 * scale}px`,
-                                                height: `${48 * scale}px`,
-                                                fontSize: `${16 * scale}px`
+                                                width: `${42 * scale}px`,
+                                                height: `${50 * scale}px`,
+                                                fontSize: `${17 * scale}px`
                                             }}
                                         >
                                             {key}
@@ -185,34 +215,38 @@ function TestingPage({ onComplete }) {
                     </div>
                 </div>
 
-                {/* Live stats */}
+                {/* Stats */}
                 <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 text-center shadow-lg">
-                        <div className="text-3xl font-bold text-blue-600">
-                            {calculateAccuracy()}%
+                    {[
+                        { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
+                        { label: "WPM", value: calcWPM(), color: "text-purple-300" },
+                        { label: "Errors", value: stats.errors, color: "text-pink-300" }
+                    ].map((s, idx) => (
+                        <div
+                            key={idx}
+                            className="
+                                bg-white/10 backdrop-blur-xl p-4 rounded-2xl text-center
+                                shadow-[0_0_20px_rgba(0,0,0,0.3)] border border-white/10
+                            "
+                        >
+                            <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
+                            <div className="text-sm text-gray-300">{s.label}</div>
                         </div>
-                        <div className="text-sm text-gray-600">Accuracy</div>
-                    </div>
-                    <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 text-center shadow-lg">
-                        <div className="text-3xl font-bold text-purple-600">
-                            {calculateWPM()}
-                        </div>
-                        <div className="text-sm text-gray-600">WPM</div>
-                    </div>
-                    <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-4 text-center shadow-lg">
-                        <div className="text-3xl font-bold text-pink-600">
-                            {stats.errors}
-                        </div>
-                        <div className="text-sm text-gray-600">Errors</div>
-                    </div>
+                    ))}
                 </div>
 
-                {/* Finish */}
+                {/* Finish Button */}
                 <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={handleFinishTest}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all"
+                    className="
+                        w-full px-6 py-4 rounded-2xl
+                        bg-gradient-to-r from-blue-600 to-purple-600
+                        text-white font-semibold shadow-xl
+                        hover:shadow-[0_0_35px_rgba(120,0,255,0.6)]
+                        transition-all
+                    "
                 >
                     Finish Test
                 </motion.button>

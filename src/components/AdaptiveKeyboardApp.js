@@ -10,27 +10,44 @@ export default function AdaptiveKeyboardApp() {
     const [currentPage, setCurrentPage] = useState('landing');
     const [testResults, setTestResults] = useState(null);
     const [userName, setUserName] = useState('');
+    const [baselineResults, setBaselineResults] = useState(null);
+    const [adaptiveResults, setAdaptiveResults] = useState(null);
+    const [testPhase, setTestPhase] = useState('baseline'); 
+    // "baseline" → "adaptive"
+
 
     const handleStart = () => {
         setCurrentPage('name');          // go to name step first
     };
 
     const handleNameSubmit = (name) => {
-        setUserName(name);
+    setUserName(name);
+    setTestPhase('baseline');
+    setCurrentPage('testing');
+};
+
+
+    const handleTestComplete = (results) => {
+    const fullResults = { ...results, name: userName };
+
+    if (testPhase === 'baseline') {
+        setBaselineResults(fullResults);
+        setTestPhase('adaptive');       // now run adaptive test
+        setCurrentPage('testing');      // go again
+    } else {
+        setAdaptiveResults(fullResults);
+        setCurrentPage('results');
+    }
+};
+
+
+        const handleRestart = () => {
+        setBaselineResults(null);
+        setAdaptiveResults(null);
+        setTestPhase('baseline');
         setCurrentPage('testing');
     };
 
-    const handleTestComplete = (results) => {
-        // attach name to results
-        const resultsWithName = { ...results, name: userName };
-        setTestResults(resultsWithName);
-        setCurrentPage('results');
-    };
-
-    const handleRestart = () => {
-        setTestResults(null);
-        setCurrentPage('testing');       // keep same name, restart test
-    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 font-sans">
@@ -42,14 +59,19 @@ export default function AdaptiveKeyboardApp() {
                     <NamePage key="name" onSubmitName={handleNameSubmit} />
                 )}
                 {currentPage === 'testing' && (
-                    <TestingPage key="testing" onComplete={handleTestComplete} />
+                    <TestingPage 
+                        key={testPhase}
+                        mode={testPhase === 'baseline' ? 'baseline' : 'adaptive'}
+                        onComplete={handleTestComplete}
+                    />
+
                 )}
                 {currentPage === 'results' && (
                     <ResultsPage
-                        key="results"
-                        results={testResults}
+                        results={{ baseline: baselineResults, adaptive: adaptiveResults }}
                         onRestart={handleRestart}
                     />
+
                 )}
             </AnimatePresence>
         </div>
