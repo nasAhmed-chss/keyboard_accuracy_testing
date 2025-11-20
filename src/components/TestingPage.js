@@ -1,3 +1,4 @@
+// src/components/TestingPage.js
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TEST_WORDS } from '../data/words';
@@ -32,10 +33,10 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
         const newWord = currentWord + key;
         setCurrentWord(newWord);
 
-        const expectedChar = targetWord[currentWord.length];
-        const isCorrect = key === expectedChar;
+        const expected = targetWord[currentWord.length];
+        const isCorrect = key === expected;
 
-        setStats((prev) => ({
+        setStats(prev => ({
             ...prev,
             totalChars: prev.totalChars + 1,
             correctChars: prev.correctChars + (isCorrect ? 1 : 0),
@@ -46,10 +47,10 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             }
         }));
 
-        if (mode === 'adaptive' && !isCorrect && expectedChar) {
-            setKeySizes((prev) => ({
+        if (mode === "adaptive" && !isCorrect && expected) {
+            setKeySizes(prev => ({
                 ...prev,
-                [expectedChar]: Math.min((prev[expectedChar] || 1) + 0.1, 1.3)
+                [expected]: Math.min((prev[expected] || 1) + 0.1, 1.3)
             }));
         }
 
@@ -61,22 +62,18 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     setWordIndex(next);
                     setTargetWord(testWords[next]);
                 } else {
-                    handleFinishTest();
+                    handleFinish();
                 }
             }, 300);
         }
     };
 
-    const handleFinishTest = () => {
-        const mins = (Date.now() - stats.startTime) / 1000 / 60;
-
-        const wpm =
-            mins === 0 ? 0 : Math.round((stats.totalChars / 5) / mins);
-
-        const accuracy =
-            stats.totalChars === 0
-                ? 100
-                : Math.round((stats.correctChars / stats.totalChars) * 100);
+    const handleFinish = () => {
+        const duration = (Date.now() - stats.startTime) / 1000 / 60;
+        const wpm = duration === 0 ? 0 : Math.round((stats.totalChars / 5) / duration);
+        const accuracy = stats.totalChars === 0
+            ? 100
+            : Math.round((stats.correctChars / stats.totalChars) * 100);
 
         onComplete({
             mode,
@@ -93,73 +90,104 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             : Math.round((stats.correctChars / stats.totalChars) * 100);
 
     const calcWPM = () => {
-        const mins = (Date.now() - stats.startTime) / 1000 / 60;
-        return mins === 0 ? 0 : Math.round((stats.totalChars / 5) / mins);
+        const duration = (Date.now() - stats.startTime) / 1000 / 60;
+        return duration === 0 ? 0 : Math.round((stats.totalChars / 5) / duration);
     };
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
             className="
-                min-h-screen flex flex-col items-center justify-center p-6
-                bg-gradient-to-br from-[#1a0b2e] via-[#3d0c49] to-[#5e0b3a]
-                text-gray-200
+                min-h-screen p-6 flex flex-col items-center justify-center
+                bg-gradient-to-br from-[#050507] via-[#0a0a12] to-[#170006]
+                text-gray-200 relative overflow-hidden
             "
         >
-            <div className="max-w-2xl w-full space-y-10">
+            {/* GRID */}
+            <div className="absolute inset-0 opacity-[0.12] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                         linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
+                    backgroundSize: "60px 60px"
+                }}
+            />
 
-                {/* Mode Label */}
-                <div className="text-center text-sm text-pink-300 tracking-wider opacity-80">
-                    {mode === 'baseline' ? "Baseline Typing Test" : "Adaptive Typing Test"}
+            {/* RED GLOW */}
+            <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen">
+                <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
+            </div>
+
+            <div className="max-w-2xl w-full space-y-10 relative z-10">
+
+                {/* TOP LABEL */}
+               <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="
+                    text-center 
+                    text-2xl sm:text-3xl font-bold 
+                    tracking-wide 
+                    mb-4
+                    bg-gradient-to-r from-purple-400 via-pink-400 to-red-400
+                    bg-clip-text text-transparent
+                    drop-shadow-[0_0_15px_rgba(255,60,120,0.45)]
+                "
+            >
+                {mode === "baseline" ? "Baseline Typing Test" : "Adaptive Typing Test"}
+
+                {/* Underline glow */}
+                <div className="mx-auto mt-3 w-96 h-[3px] rounded-full 
+                    bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 
+                    shadow-[0_0_18px_rgba(255,60,120,0.7)]">
                 </div>
+            </motion.div>
 
-                {/* Progress */}
-                <div className="flex justify-between items-center text-gray-300">
+
+                {/* PROGRESS */}
+                <div className="flex justify-between text-gray-300">
                     <div>Word {wordIndex + 1} of {testWords.length}</div>
-
                     <div className="flex gap-2">
-                        {testWords.map((_, idx) => (
+                        {testWords.map((_, i) => (
                             <div
-                                key={idx}
+                                key={i}
                                 className={`w-2 h-2 rounded-full ${
-                                    idx < wordIndex
-                                        ? 'bg-green-400'
-                                        : idx === wordIndex
-                                            ? 'bg-blue-400'
-                                            : 'bg-gray-600'
+                                    i < wordIndex
+                                        ? "bg-green-400"
+                                        : i === wordIndex
+                                            ? "bg-red-300"
+                                            : "bg-gray-600"
                                 }`}
                             />
                         ))}
                     </div>
                 </div>
 
-                {/* Word Card */}
+                {/* WORD CARD */}
                 <motion.div
                     key={targetWord}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="
-                        bg-white/10 backdrop-blur-xl
-                        p-8 text-center rounded-3xl
-                        shadow-[0_0_25px_rgba(255,0,120,0.25)]
-                        border border-white/10
+                        p-8 rounded-3xl bg-white/10 backdrop-blur-xl
+                        border border-white/10 shadow-[0_0_35px_rgba(255,0,100,0.3)]
+                        text-center
                     "
                 >
                     <p className="text-sm text-gray-300">Type this word:</p>
 
-                    <div className="text-4xl font-bold tracking-wide mt-2">
+                    <div className="text-4xl font-bold tracking-widest mt-2">
                         {targetWord.split('').map((char, i) => (
                             <span
                                 key={i}
                                 className={
                                     i < currentWord.length
                                         ? currentWord[i] === char
-                                            ? 'text-green-400'
-                                            : 'text-red-400'
-                                        : 'text-gray-100'
+                                            ? "text-green-400"
+                                            : "text-red-400"
+                                        : "text-gray-100"
                                 }
                             >
                                 {char}
@@ -167,25 +195,22 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                         ))}
                     </div>
 
-                    <div className="mt-4 text-2xl text-gray-400 min-h-8">
+                    <div className="mt-3 text-2xl text-gray-400 min-h-8">
                         {currentWord || "_"}
                     </div>
                 </motion.div>
 
-                {/* Keyboard Panel */}
-                <div
-                    className="
-                        bg-white/10 backdrop-blur-xl p-6 rounded-3xl
-                        shadow-[0_0_20px_rgba(0,0,0,0.3)] border border-white/10
-                    "
-                >
+                {/* KEYBOARD */}
+                <div className="
+                    bg-white/10 backdrop-blur-xl rounded-3xl p-6
+                    border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
+                ">
                     <div className="space-y-2">
-                        {keyboardLayout.map((row, r) => (
-                            <div key={r} className="flex justify-center gap-2">
-                                {row.map((key) => {
-                                    const scale = mode === 'adaptive'
-                                        ? keySizes[key] || 1
-                                        : 1;
+                        {keyboardLayout.map((row, ri) => (
+                            <div key={ri} className="flex justify-center gap-2">
+                                {row.map(key => {
+                                    const scale =
+                                        mode === "adaptive" ? (keySizes[key] || 1) : 1;
 
                                     return (
                                         <motion.button
@@ -194,11 +219,11 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                                             animate={{ scale }}
                                             onClick={() => handleKeyPress(key)}
                                             className="
-                                                bg-gradient-to-br from-[#ffffff11] to-[#cccccc22]
-                                                text-gray-200 uppercase font-semibold
-                                                rounded-xl shadow-md hover:shadow-lg
-                                                hover:bg-[#ffffff22]
-                                                transition-all backdrop-blur-lg
+                                                uppercase font-semibold rounded-xl
+                                                text-gray-200 bg-[#ffffff15]
+                                                hover:bg-[#ffffff25]
+                                                backdrop-blur-lg shadow-md
+                                                transition-all
                                             "
                                             style={{
                                                 width: `${42 * scale}px`,
@@ -215,18 +240,18 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     </div>
                 </div>
 
-                {/* Stats */}
+                {/* LIVE STATS */}
                 <div className="grid grid-cols-3 gap-4">
                     {[
                         { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
                         { label: "WPM", value: calcWPM(), color: "text-purple-300" },
-                        { label: "Errors", value: stats.errors, color: "text-pink-300" }
-                    ].map((s, idx) => (
+                        { label: "Errors", value: stats.errors, color: "text-red-300" }
+                    ].map((s, i) => (
                         <div
-                            key={idx}
+                            key={i}
                             className="
                                 bg-white/10 backdrop-blur-xl p-4 rounded-2xl text-center
-                                shadow-[0_0_20px_rgba(0,0,0,0.3)] border border-white/10
+                                border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
                             "
                         >
                             <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
@@ -235,21 +260,21 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     ))}
                 </div>
 
-                {/* Finish Button */}
+                {/* FINISH BUTTON */}
                 <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={handleFinishTest}
+                    onClick={handleFinish}
                     className="
-                        w-full px-6 py-4 rounded-2xl
+                        w-full px-6 py-4 rounded-2xl font-semibold text-white
                         bg-gradient-to-r from-blue-600 to-purple-600
-                        text-white font-semibold shadow-xl
-                        hover:shadow-[0_0_35px_rgba(120,0,255,0.6)]
+                        shadow-xl hover:shadow-[0_0_35px_rgba(120,0,255,0.6)]
                         transition-all
                     "
                 >
                     Finish Test
                 </motion.button>
+
             </div>
         </motion.div>
     );

@@ -1,6 +1,7 @@
+// src/components/ResultsPage.js
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Keyboard, BarChart3, TrendingUp, Target, RotateCcw } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, RotateCcw } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 
 function ResultsPage({ results, onRestart }) {
@@ -14,21 +15,13 @@ function ResultsPage({ results, onRestart }) {
     useEffect(() => {
         if (!adaptive) return;
 
-        const save = async () => {
-            try {
-                await supabase.from('typing_results').insert([{
-                    name: adaptive.name,
-                    accuracy: adaptive.accuracy,
-                    wpm: adaptive.wpm,
-                    errors: adaptive.errors,
-                    key_errors: adaptive.keyErrors
-                }]);
-            } catch (err) {
-                console.error("Supabase save error:", err);
-            }
-        };
-
-        save();
+        supabase.from("typing_results").insert([{
+            name: adaptive.name,
+            accuracy: adaptive.accuracy,
+            wpm: adaptive.wpm,
+            errors: adaptive.errors,
+            key_errors: adaptive.keyErrors
+        }]);
     }, [adaptive]);
 
     const accChange = adaptive && baseline ? adaptive.accuracy - baseline.accuracy : 0;
@@ -39,55 +32,63 @@ function ResultsPage({ results, onRestart }) {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
             className="
-                min-h-screen flex flex-col items-center justify-center p-6
-                bg-gradient-to-br from-[#1a0b2e] via-[#3d0c49] to-[#5e0b3a]
-                text-gray-200
+                min-h-screen p-6 flex items-center justify-center
+                bg-gradient-to-br from-[#050507] via-[#0a0a12] to-[#170006]
+                text-gray-200 relative overflow-hidden
             "
         >
-            <div className="max-w-5xl w-full space-y-12">
+            {/* GRID */}
+            <div className="absolute inset-0 opacity-[0.12] pointer-events-none"
+                style={{
+                    backgroundImage:
+                        `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                         linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
+                    backgroundSize: "60px 60px"
+                }}
+            />
 
-                {/* Header */}
+            {/* RED GLOW */}
+            <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen">
+                <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
+            </div>
+
+            <div className="max-w-5xl w-full space-y-12 relative z-10">
+
+                {/* HEADER */}
                 <motion.div
-                    initial={{ y: -20, opacity: 0 }}
+                    initial={{ y: -15, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
                     className="text-center"
                 >
-                    <h2 className="text-4xl font-bold text-white drop-shadow-lg">
+                    <h2 className="text-4xl font-bold text-white drop-shadow-xl">
                         Test Complete!
                     </h2>
-
                     <p className="text-gray-300 mt-2">
-                        Thanks, <span className="text-pink-300 font-semibold">{name}</span>.
-                        Here's how your typing improved.
+                        Thanks, <span className="text-red-300 font-semibold">{name}</span>.
+                        Here’s your improvement summary.
                     </p>
                 </motion.div>
 
-                {/* Stat Cards */}
+                {/* RESULT CARDS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                    {/* Accuracy */}
+                    {/* ACCURACY */}
                     <motion.div
-                        initial={{ opacity: 0, y: 25 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
                         className="
                             bg-white/10 backdrop-blur-xl rounded-3xl p-8
-                            shadow-[0_0_30px_rgba(255,0,120,0.25)]
-                            border border-white/10 text-white
+                            border border-white/10 shadow-[0_0_35px_rgba(255,0,100,0.35)]
                         "
                     >
-                        <Target className="w-12 h-12 mb-4 text-pink-300" />
+                        <Target className="w-12 h-12 text-red-300 mb-3" />
                         <div className="text-4xl font-bold">{adaptive?.accuracy}%</div>
-                        <div className="text-pink-200 mt-1">Adaptive Accuracy</div>
-
+                        <p className="text-red-200 mt-1">Adaptive Accuracy</p>
                         {baseline && (
-                            <p className="mt-4 text-gray-300 text-sm">
+                            <p className="text-gray-300 text-sm mt-4">
                                 Baseline: {baseline.accuracy}% <br />
-                                Change: <span className="text-pink-300 font-semibold">
+                                Change: <span className="text-red-300 font-semibold">
                                     {accChange >= 0 ? "+" : ""}{accChange}%
                                 </span>
                             </p>
@@ -96,21 +97,18 @@ function ResultsPage({ results, onRestart }) {
 
                     {/* WPM */}
                     <motion.div
-                        initial={{ opacity: 0, y: 25 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
                         className="
                             bg-white/10 backdrop-blur-xl rounded-3xl p-8
-                            shadow-[0_0_30px_rgba(120,0,255,0.25)]
-                            border border-white/10 text-white
+                            border border-white/10 shadow-[0_0_35px_rgba(255,0,100,0.35)]
                         "
                     >
-                        <TrendingUp className="w-12 h-12 mb-4 text-purple-300" />
+                        <TrendingUp className="w-12 h-12 text-purple-300 mb-3" />
                         <div className="text-4xl font-bold">{adaptive?.wpm}</div>
-                        <div className="text-purple-200 mt-1">Adaptive WPM</div>
-
+                        <p className="text-purple-200 mt-1">Adaptive WPM</p>
                         {baseline && (
-                            <p className="mt-4 text-gray-300 text-sm">
+                            <p className="text-gray-300 text-sm mt-4">
                                 Baseline: {baseline.wpm} <br />
                                 Change: <span className="text-purple-300 font-semibold">
                                     {wpmChange >= 0 ? "+" : ""}{wpmChange}
@@ -119,25 +117,22 @@ function ResultsPage({ results, onRestart }) {
                         )}
                     </motion.div>
 
-                    {/* Errors */}
+                    {/* ERRORS */}
                     <motion.div
-                        initial={{ opacity: 0, y: 25 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
                         className="
                             bg-white/10 backdrop-blur-xl rounded-3xl p-8
-                            shadow-[0_0_30px_rgba(255,0,80,0.25)]
-                            border border-white/10 text-white
+                            border border-white/10 shadow-[0_0_35px_rgba(255,0,100,0.35)]
                         "
                     >
-                        <BarChart3 className="w-12 h-12 mb-4 text-red-300" />
+                        <BarChart3 className="w-12 h-12 text-pink-300 mb-3" />
                         <div className="text-4xl font-bold">{adaptive?.errors}</div>
-                        <div className="text-red-200 mt-1">Adaptive Errors</div>
-
+                        <p className="text-pink-200 mt-1">Adaptive Errors</p>
                         {baseline && (
-                            <p className="mt-4 text-gray-300 text-sm">
+                            <p className="text-gray-300 text-sm mt-4">
                                 Baseline: {baseline.errors} <br />
-                                Change: <span className="text-red-300 font-semibold">
+                                Change: <span className="text-pink-300 font-semibold">
                                     {errChange >= 0 ? "+" : ""}{errChange}
                                 </span>
                             </p>
@@ -145,16 +140,15 @@ function ResultsPage({ results, onRestart }) {
                     </motion.div>
                 </div>
 
-                {/* Restart Button */}
+                {/* RESTART BUTTON */}
                 <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={onRestart}
                     className="
-                        w-full px-8 py-4 rounded-2xl
+                        w-full px-8 py-4 rounded-2xl font-semibold text-white
                         bg-gradient-to-r from-blue-600 to-purple-600
-                        text-white font-semibold shadow-xl
-                        hover:shadow-[0_0_35px_rgba(120,0,255,0.6)]
+                        shadow-xl hover:shadow-[0_0_35px_rgba(120,0,255,0.6)]
                         transition-all flex items-center justify-center gap-3
                     "
                 >

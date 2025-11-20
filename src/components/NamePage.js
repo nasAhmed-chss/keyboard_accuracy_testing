@@ -1,6 +1,7 @@
 // src/components/NamePage.js
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Activity, Layers, ArrowDownCircle } from "lucide-react";
 
 function NamePage({ onSubmitName }) {
     const [name, setName] = useState('');
@@ -38,7 +39,7 @@ function NamePage({ onSubmitName }) {
                 }}
             />
 
-            {/* Red glow from landing */}
+            {/* Red glow */}
             <div className="absolute inset-0 pointer-events-none mix-blend-screen opacity-40">
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
@@ -53,27 +54,71 @@ function NamePage({ onSubmitName }) {
                     relative z-10 max-w-md w-full 
                     bg-white/15 backdrop-blur-2xl
                     rounded-3xl p-10 
-                    shadow-[0_0_40px_rgba(120,20,255,0.35)]
+                    shadow-[0_0_40px_rgba(255,0,120,0.25)]
                     border border-white/20 
-                    ring-1 ring-purple-500/20
-
-                    hover:shadow-[0_0_55px_rgba(150,60,255,0.5)]
+                    ring-1 ring-red-500/20
+                    hover:shadow-[0_0_55px_rgba(255,0,120,0.4)]
                 "
             >
                 {/* Title */}
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-lg mb-3 text-center">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-red-300 to-pink-300 bg-clip-text text-transparent drop-shadow-lg mb-4 text-center">
                     Before we begin…
                 </h2>
 
-                <p className="text-gray-200/90 mb-8 text-center leading-relaxed">
-                    Enter your name to personalize your typing test results.
+                {/* Modern Test Description */}
+                <p className="text-gray-200/90 mb-6 text-center leading-relaxed text-sm">
+                    This study includes <strong className="text-red-300">two short typing tests</strong> designed  
+                    to measure how adaptive keyboards can improve typing performance.
                 </p>
 
+                {/* Flow Diagram */}
+                <div className="space-y-5 mb-8">
+
+                    {/* Step 1 */}
+                    <div className="flex items-start gap-4">
+                        <div className="p-2 rounded-xl bg-red-400/20 border border-red-500/30">
+                            <Layers className="w-6 h-6 text-red-300" />
+                        </div>
+                        <p className="text-gray-200 text-sm leading-relaxed">
+                            <strong className="text-red-300">Baseline Test</strong>:  
+                            A standard on-screen keyboard to measure your natural  
+                            <strong className="text-red-300"> speed</strong>, 
+                            <strong className="text-red-300"> accuracy</strong>, and  
+                            <strong className="text-red-300"> error rate</strong>.
+                        </p>
+                    </div>
+
+                    {/* Arrow */}
+                    <div className="flex justify-center opacity-60">
+                        <ArrowDownCircle className="w-6 h-6 text-red-300" />
+                    </div>
+
+                    {/* Step 2 */}
+                    <div className="flex items-start gap-4">
+                        <div className="p-2 rounded-xl bg-pink-400/20 border border-pink-500/30">
+                            <Activity className="w-6 h-6 text-pink-300" />
+                        </div>
+                        <p className="text-gray-200 text-sm leading-relaxed">
+                            <strong className="text-pink-300">Adaptive Test</strong>:  
+                            A dynamic keyboard where keys automatically  
+                            <strong className="text-pink-300"> enlarge </strong>  
+                            when you make mistakes — helping reduce errors.
+                        </p>
+                    </div>
+
+                    {/* Summary Line */}
+                    <p className="text-center text-gray-300 text-sm mt-4">
+                        We'll then <strong className="text-red-300">compare your results </strong>  
+                        to see how adaptive resizing affects performance.
+                    </p>
+                </div>
+
+                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                     {/* Input Label */}
                     <label className="block text-sm font-medium text-gray-200 tracking-wide">
-                        Full Name
+                        Your Name
                     </label>
 
                     {/* Futuristic Input */}
@@ -82,14 +127,14 @@ function NamePage({ onSubmitName }) {
                         className="
                             rounded-2xl bg-white/10 text-white px-4 py-3 
                             border border-white/20 
-                            focus-within:ring-2 focus-within:ring-purple-500/60 
+                            focus-within:ring-2 focus-within:ring-red-500/60 
                             focus-within:border-transparent
                             shadow-inner shadow-black/40
                         "
                     >
                         <input
                             type="text"
-                            className="w-full bg-transparent outline-none placeholder-gray-400"
+                            className="w-full bg-transparent outline-none placeholder-gray-500"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             onBlur={() => setTouched(true)}
@@ -120,6 +165,7 @@ function NamePage({ onSubmitName }) {
 
                 </form>
             </motion.div>
+
         </motion.div>
     );
 }
