@@ -14,7 +14,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
         startTime: Date.now(),
         keyErrors: {}
     });
-
+    
     const [keySizes, setKeySizes] = useState({});
 
     const testWords = TEST_WORDS.slice(0, 20);
@@ -232,9 +232,9 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                                         "
 
                                             style={{
-                                                width: `${42 * scale}px`,
-                                                height: `${50 * scale}px`,
-                                                fontSize: `${17 * scale}px`
+                                                width: `${55 * scale}px`,
+                                                height: `${65 * scale}px`,
+                                                fontSize: `${22 * scale}px`
                                             }}
                                         >
                                             {key}
