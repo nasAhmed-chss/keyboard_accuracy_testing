@@ -196,7 +196,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
               <Zap className="w-4 h-4 text-green-400" />
               <span className="text-sm text-green-300 font-medium">Our Solution</span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+        <h2 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent leading-tight pb-3">
               Intelligence at Your Fingertips
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
@@ -282,7 +282,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
       <section className="relative py-32 bg-gradient-to-b from-black to-blue-950/20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent leading-tight pb-2">
               Research Approach
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
@@ -329,7 +329,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
       {/* Expected Impact Section */}
       <section className="relative py-32 bg-gradient-to-b from-blue-950/20 to-black">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h2 className="text-5xl md:text-6xl font-bold mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight pb-2">
             Expected Impact
           </h2>
           
