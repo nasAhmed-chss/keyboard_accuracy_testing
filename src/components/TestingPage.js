@@ -206,45 +206,103 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 </motion.div>
 
                 {/* KEYBOARD */}
-                <div className="
-                    bg-white/10 backdrop-blur-xl rounded-3xl p-6
-                    border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
-                ">
-                    <div className="space-y-2">
-                        {keyboardLayout.map((row, ri) => (
-                            <div key={ri} className="flex justify-center gap-2">
-                                {row.map(key => {
-                                    const scale =
-                                        mode === "adaptive" ? (keySizes[key] || 1) : 1;
+<div className="
+    bg-white/10 backdrop-blur-xl rounded-3xl p-4 pb-6
+    border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
+    w-full max-w-lg mx-auto
+">
+    <div className="space-y-3">
 
-                                    return (
-                                        <motion.button
-                                            key={key}
-                                            whileTap={{ scale: 0.85 }}
-                                            animate={{ scale }}
-                                            onClick={() => handleKeyPress(key)}
-                                            className="
-                                            uppercase font-semibold rounded-xl
-                                            text-gray-200 
-                                            bg-[#1a1a1e] hover:bg-[#2a2a30]
-                                            shadow-md shadow-black/40
-                                            transition-all
-                                        "
+        {/* ROW 1 */}
+        <div className="flex justify-center gap-2">
+            {keyboardLayout[0].map(key => {
+                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
+                return (
+                    <motion.button
+                        key={key}
+                        whileTap={{ scale: 0.9 }}
+                        animate={{ scale }}
+                        onClick={() => handleKeyPress(key)}
+                        className="
+                            uppercase font-semibold rounded-2xl
+                            text-gray-200 
+                            bg-[#1e1e22] hover:bg-[#2c2c31]
+                            shadow-md shadow-black/40
+                            transition-all
+                        "
+                        style={{
+                            width: `${44 * scale}px`,
+                            height: `${52 * scale}px`,
+                            fontSize: `${20 * scale}px`,
+                        }}
+                    >
+                        {key}
+                    </motion.button>
+                );
+            })}
+        </div>
 
-                                            style={{
-                                                width: `${55 * scale}px`,
-                                                height: `${65 * scale}px`,
-                                                fontSize: `${22 * scale}px`
-                                            }}
-                                        >
-                                            {key}
-                                        </motion.button>
-                                    );
-                                })}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+        {/* ROW 2 (indented like iPhone) */}
+        <div className="flex justify-center gap-2 pl-6"> 
+            {keyboardLayout[1].map(key => {
+                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
+                return (
+                    <motion.button
+                        key={key}
+                        whileTap={{ scale: 0.9 }}
+                        animate={{ scale }}
+                        onClick={() => handleKeyPress(key)}
+                        className="
+                            uppercase font-semibold rounded-2xl
+                            text-gray-200 
+                            bg-[#1e1e22] hover:bg-[#2c2c31]
+                            shadow-md shadow-black/40
+                            transition-all
+                        "
+                        style={{
+                            width: `${48 * scale}px`,
+                            height: `${54 * scale}px`,
+                            fontSize: `${20 * scale}px`,
+                        }}
+                    >
+                        {key}
+                    </motion.button>
+                );
+            })}
+        </div>
+
+        {/* ROW 3 (more indent like iPhone) */}
+        <div className="flex justify-center gap-2 pl-12">
+            {keyboardLayout[2].map(key => {
+                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
+                return (
+                    <motion.button
+                        key={key}
+                        whileTap={{ scale: 0.9 }}
+                        animate={{ scale }}
+                        onClick={() => handleKeyPress(key)}
+                        className="
+                            uppercase font-semibold rounded-2xl
+                            text-gray-200 
+                            bg-[#1e1e22] hover:bg-[#2c2c31]
+                            shadow-md shadow-black/40
+                            transition-all
+                        "
+                        style={{
+                            width: `${50 * scale}px`,
+                            height: `${56 * scale}px`,
+                            fontSize: `${20 * scale}px`,
+                        }}
+                    >
+                        {key}
+                    </motion.button>
+                );
+            })}
+        </div>
+
+    </div>
+</div>
+
 
                 {/* LIVE STATS */}
                 <div className="grid grid-cols-3 gap-4">
