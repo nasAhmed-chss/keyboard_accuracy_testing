@@ -21,8 +21,12 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
 
     useEffect(() => {
         setTargetWord(testWords[0]);
+    }, []);
+    // Force page to load from the top on iPhone Safari
+    useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
 
     const keyboardLayout = [
         ['q','w','e','r','t','y','u','i','o','p'],
@@ -65,7 +69,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 } else {
                     handleFinish();
                 }
-            }, 250);
+            }, 300);
         }
     };
 
@@ -100,14 +104,12 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="
-                min-h-screen p-6 
-                pb-[45vh]      /* <-- keeps UI above keyboard */
-                flex flex-col items-center
+                min-h-screen p-6 flex flex-col items-center justify-center
                 bg-gradient-to-br from-[#050507] via-[#0a0a12] to-[#170006]
-                text-gray-200 relative overflow-x-hidden
+                text-gray-200 relative overflow-hidden
             "
         >
-            {/* GRID BG */}
+            {/* GRID */}
             <div className="absolute inset-0 opacity-[0.12] pointer-events-none"
                 style={{
                     backgroundImage:
@@ -117,31 +119,37 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 }}
             />
 
-            {/* LIGHT GLOW */}
+            {/* RED GLOW */}
             <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen">
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
 
             <div className="max-w-2xl w-full space-y-10 relative z-10">
 
-                {/* HEADER */}
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="
-                        text-center text-3xl font-bold tracking-wide mb-4
-                        bg-gradient-to-r from-purple-400 via-pink-400 to-red-400
-                        bg-clip-text text-transparent
-                        drop-shadow-[0_0_15px_rgba(255,60,120,0.45)]
-                    "
-                >
-                    {mode === "baseline" ? "Baseline Typing Test" : "Adaptive Typing Test"}
+                {/* TOP LABEL */}
+               <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="
+                    text-center 
+                    text-2xl sm:text-3xl font-bold 
+                    tracking-wide 
+                    mb-4
+                    bg-gradient-to-r from-purple-400 via-pink-400 to-red-400
+                    bg-clip-text text-transparent
+                    drop-shadow-[0_0_15px_rgba(255,60,120,0.45)]
+                "
+            >
+                {mode === "baseline" ? "Baseline Typing Test" : "Adaptive Typing Test"}
 
-                    <div className="mx-auto mt-3 w-96 h-[3px] rounded-full 
-                        bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 
-                        shadow-[0_0_18px_rgba(255,60,120,0.7)]" />
-                </motion.div>
+                {/* Underline glow */}
+                <div className="mx-auto mt-3 w-96 h-[3px] rounded-full 
+                    bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 
+                    shadow-[0_0_18px_rgba(255,60,120,0.7)]">
+                </div>
+            </motion.div>
+
 
                 {/* PROGRESS */}
                 <div className="flex justify-between text-gray-300">
@@ -197,49 +205,50 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     </div>
                 </motion.div>
 
-                {/* DESKTOP KEYBOARD (≥640px) */}
-                <div className="hidden sm:block">
-                    <div className="
-                        bg-white/10 backdrop-blur-xl rounded-3xl p-6
-                        border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
-                    ">
-                        <div className="space-y-2">
-                            {keyboardLayout.map((row, ri) => (
-                                <div key={ri} className="flex justify-center gap-2">
-                                    {row.map(key => {
-                                        const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
-                                        return (
-                                            <motion.button
-                                                key={key}
-                                                whileTap={{ scale: 0.85 }}
-                                                animate={{ scale }}
-                                                onClick={() => handleKeyPress(key)}
-                                                className="
-                                                    uppercase font-semibold rounded-xl
-                                                    text-gray-200 bg-[#1a1a1e]
-                                                    hover:bg-[#2a2a30]
-                                                    shadow-md shadow-black/40
-                                                    transition-all
-                                                "
-                                                style={{
-                                                    width: `${42 * scale}px`,
-                                                    height: `${50 * scale}px`,
-                                                    fontSize: `${17 * scale}px`
-                                                }}
-                                            >
-                                                {key}
-                                            </motion.button>
-                                        );
-                                    })}
-                                </div>
-                            ))}
-                        </div>
+                {/* KEYBOARD */}
+                <div className="
+                    bg-white/10 backdrop-blur-xl rounded-3xl p-6
+                    border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
+                ">
+                    <div className="space-y-2">
+                        {keyboardLayout.map((row, ri) => (
+                            <div key={ri} className="flex justify-center gap-2">
+                                {row.map(key => {
+                                    const scale =
+                                        mode === "adaptive" ? (keySizes[key] || 1) : 1;
+
+                                    return (
+                                        <motion.button
+                                            key={key}
+                                            whileTap={{ scale: 0.85 }}
+                                            animate={{ scale }}
+                                            onClick={() => handleKeyPress(key)}
+                                            className="
+                                            uppercase font-semibold rounded-xl
+                                            text-gray-200 
+                                            bg-[#1a1a1e] hover:bg-[#2a2a30]
+                                            shadow-md shadow-black/40
+                                            transition-all
+                                        "
+
+                                            style={{
+                                                width: `${42 * scale}px`,
+                                                height: `${50 * scale}px`,
+                                                fontSize: `${17 * scale}px`
+                                            }}
+                                        >
+                                            {key}
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 {/* LIVE STATS */}
                 <div className="grid grid-cols-3 gap-4">
-                    {[ 
+                    {[
                         { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
                         { label: "WPM", value: calcWPM(), color: "text-purple-300" },
                         { label: "Errors", value: stats.errors, color: "text-red-300" }
@@ -271,55 +280,8 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 >
                     Finish Test
                 </motion.button>
+
             </div>
-
-            {/* MOBILE KEYBOARD (only on <640px) */}
-            <div
-                className="
-                    fixed bottom-0 left-0 w-full
-                    bg-[#111]/80 backdrop-blur-2xl
-                    border-t border-white/10 
-                    shadow-[0_-5px_35px_rgba(0,0,0,0.55)]
-                    p-4 z-50 sm:hidden
-                "
-                style={{ height: "42vh" }}  // ⬅ realistic iOS-style height
-            >
-                <div className="h-full flex flex-col justify-between pb-2">
-                    {keyboardLayout.map((row, ri) => (
-                        <div key={ri} className="flex justify-center gap-[2vw] w-full">
-                            {row.map(key => {
-                                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
-
-                                return (
-                                    <motion.button
-                                        key={key}
-                                        whileTap={{ scale: 0.85 }}
-                                        animate={{ scale }}
-                                        onClick={() => handleKeyPress(key)}
-                                        className="
-                                            uppercase font-semibold rounded-xl
-                                            text-gray-200 
-                                            bg-[#1a1a1e] hover:bg-[#2a2a30]
-                                            shadow-md shadow-black/40
-                                            transition-all flex items-center justify-center
-                                        "
-                                        style={{
-                                            flex: "1 1 0",
-                                            height: `calc(11.5vh * ${scale})`,
-                                            maxWidth: "14%",
-                                            minWidth: "10%",
-                                            fontSize: `${3.6 * scale}vw`,
-                                        }}
-                                    >
-                                        {key}
-                                    </motion.button>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </div>
-            </div>
-
         </motion.div>
     );
 }
