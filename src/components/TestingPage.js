@@ -143,7 +143,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="
-                min-h-screen p-6 flex flex-col items-center justify-center
+                min-h-[var(--app-height)] p-6 flex flex-col items-center justify-center
                 bg-gradient-to-br from-[#050507] via-[#0a0a12] to-[#170006]
                 text-gray-200 relative overflow-hidden
             "
@@ -163,7 +163,19 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
 
-            <div className="max-w-2xl w-full space-y-10 relative z-10 flex-1 overflow-y-auto pb-[300px]">
+           <div
+                className="
+                    w-full                       /* FULL width on all screens */
+                    max-w-none                   /* Remove max-width restriction */
+                    md:max-w-2xl                 /* Only cap width on desktop */
+                    space-y-8
+                    relative z-10 
+                    flex-1
+                    overflow-y-auto
+                    pb-[300px]
+                "
+            >
+
 
 
 
@@ -193,7 +205,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
 
 
                 {/* PROGRESS */}
-                <div className="flex justify-between text-gray-300">
+                <div className="flex justify-between text-gray-300 text-xs sm:text-sm whitespace-nowrap">
                     <div>Word {wordIndex + 1} of {testWords.length}</div>
                     <div className="flex gap-2">
                         {testWords.map((_, i) => (
@@ -282,6 +294,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
 
                     /* Add neon underglow */
                     md:shadow-[0_0_40px_10px_rgba(255,0,120,0.25)]
+                    block md:hidden
                 "
                 >
 
@@ -294,6 +307,20 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     onKeyPress={handleKeyPress}
                 />
             </div>
+            {/* DESKTOP PLACEHOLDER */}
+            <div
+                className="
+                    hidden md:flex
+                    fixed bottom-0 left-0 right-0
+                    h-[180px]
+                    bg-black/20 backdrop-blur-xl border-t border-white/10
+                    text-center items-center justify-center
+                    text-gray-300 text-sm
+                "
+            >
+                Custom keyboard is only available on iOS.
+            </div>
+
 
 
                 

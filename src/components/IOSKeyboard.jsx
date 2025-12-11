@@ -1,90 +1,59 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const KEY_ROWS = [
-  ["q","w","e","r","t","y","u","i","o","p"],
-  ["a","s","d","f","g","h","j","k","l"]
-];
-
-
-const BOTTOM_ROW = ["z","x","c","v","b","n","m"];
-
+const TOP_ROW = ["q","w","e","r","t","y","u","i","o","p"];
+const MID_ROW = ["a","s","d","f","g","h","j","k","l"];
+const BOT_ROW = ["z","x","c","v","b","n","m"];
 
 export default function IOSKeyboard({ onKeyPress, mode, keySizes }) {
   return (
-    <div className="w-full bg-transparent py-3 pb-6 select-none">
+    <div
+      className="select-none mx-auto"
+      style={{
+        width: "94vw",             // Scales perfectly across all iPhones
+        maxWidth: "500px",         // Prevents giant keys on Pro Max
+        paddingBottom: "env(safe-area-inset-bottom)"
+      }}
+    >
+      {/* Row 1 */}
+      <Row keys={TOP_ROW} onKeyPress={onKeyPress} mode={mode} keySizes={keySizes} />
 
-      {/* Top row */}
-      <Row keys={KEY_ROWS[0]} mode={mode} keySizes={keySizes} onKeyPress={onKeyPress} />
-
-      {/* Middle row */}
-      <div className="flex justify-center mt-2">
-        <Row
-          keys={KEY_ROWS[1]}
-          indent={22}
-          mode={mode}
-          keySizes={keySizes}
-          onKeyPress={onKeyPress}
-        />
+      {/* Row 2 (indented like iOS) */}
+      <div style={{ marginTop: 8, paddingLeft: "4vw" }}>
+        <Row keys={MID_ROW} onKeyPress={onKeyPress} mode={mode} keySizes={keySizes} />
       </div>
 
-      {/* Bottom row */}
-      <div className="flex items-center justify-center mt-2 space-x-2 px-2">
+      {/* Row 3 */}
+      <div className="flex items-center justify-between mt-3">
 
-        {/* Shift */}
-        <SpecialKey label="⇧" wide onClick={() => {}} />
+        <SpecialKey label="⇧" />
 
-        {/* Letters */}
-        <Row
-          keys={BOTTOM_ROW}
-          mode={mode}
-          keySizes={keySizes}
-          onKeyPress={onKeyPress}
-        />
+        <div className="flex-1 flex justify-center">
+          <Row keys={BOT_ROW} onKeyPress={onKeyPress} mode={mode} keySizes={keySizes} />
+        </div>
 
-        {/* Backspace */}
-        <SpecialKey
-          label="⌫"
-          wide
-          onClick={() => {}}
-        />
+        <SpecialKey label="⌫" />
       </div>
 
-      {/* Last row */}
-      <div className="flex items-center justify-between mt-3 px-3">
-        <SpecialKey label="🌐" wide onClick={() => {}} />
+      {/* Bottom row (space bar) */}
+      <div className="flex items-center justify-between mt-3">
 
-        <SpecialKey label="😊" wide onClick={() => {}} />
+        <SpecialKey label="🌐" />
 
-        {/* Spacebar */}
-        <motion.div
-          whileTap={{ scale: 0.94 }}
-          onClick={() => onKeyPress(" ")}
-          className="
-            flex-1 mx-2 h-[52px]
-            bg-[#3a3a3c] rounded-xl
-            flex justify-center items-center
-            text-[18px] text-white font-medium
-          "
-        >
-          space
-        </motion.div>
+        <Spacebar onPress={() => onKeyPress(" ")} />
 
-        <SpecialKey label="return" wide onClick={() => {}} />
+        <SpecialKey label="return" />
       </div>
     </div>
   );
 }
 
 /* -------------------------------------------- */
-/* ROW */
+/* ROW - PROPORTIONAL KEYS */
 /* -------------------------------------------- */
-function Row({ keys, indent = 0, onKeyPress, mode, keySizes }) {
+function Row({ keys, onKeyPress, mode, keySizes }) {
   return (
-    <div
-      className="flex justify-center space-x-2 px-2"
-      style={{ paddingLeft: indent, paddingRight: indent }}
-    >
+    <div className="flex justify-between w-full">
       {keys.map((key) => (
         <Key
           key={key}
@@ -99,28 +68,28 @@ function Row({ keys, indent = 0, onKeyPress, mode, keySizes }) {
 }
 
 /* -------------------------------------------- */
-/* LETTER KEYS — ADAPTIVE LOGIC APPLIED HERE */
+/* LETTER KEY */
 /* -------------------------------------------- */
 function Key({ label, onClick, mode, scaleValue }) {
   const scale = mode === "adaptive" ? scaleValue : 1;
 
   return (
     <motion.div
-      whileTap={{ scale: 0.85 }}
+      whileTap={{ scale: 0.9 }}
       animate={{ scale }}
       onClick={onClick}
       className="
-        w-[36px] h-[52px]
         bg-[#3a3a3c]
         rounded-xl
         flex justify-center items-center
-        text-[18px] text-white font-semibold
-        active:bg-[#505055]
+        text-white font-semibold
       "
       style={{
-        width: 36 * scale,
-        height: 52 * scale,
-        fontSize: 18 * scale
+        width: "8.5vw",                // Perfect for iPhones
+        maxWidth: 44,                  // Matches iOS key width
+        height: "clamp(42px, 6vh, 56px)",
+        fontSize: "clamp(15px, 2vh, 20px)",
+        margin: "0.5vw"
       }}
     >
       {label}
@@ -129,22 +98,53 @@ function Key({ label, onClick, mode, scaleValue }) {
 }
 
 /* -------------------------------------------- */
-/* SPECIAL KEYS (unchanged) */
+/* SPECIAL KEYS */
 /* -------------------------------------------- */
-function SpecialKey({ label, wide, onClick }) {
+function SpecialKey({ label }) {
   return (
     <motion.div
-      whileTap={{ scale: 0.92 }}
-      onClick={onClick}
-      className={`
-        ${wide ? "w-[50px]" : "w-[36px]"}
-        h-[52px] bg-[#3a3a3c] rounded-xl
+      whileTap={{ scale: 0.9 }}
+      className="
+        bg-[#3a3a3c]
+        rounded-xl
         flex justify-center items-center
-        text-[18px] text-white font-semibold
-        active:bg-[#505055]
-      `}
+        text-white font-semibold
+      "
+      style={{
+        width: "12vw",
+        maxWidth: 60,
+        height: "clamp(42px, 6vh, 56px)",
+        fontSize: "clamp(14px, 2vh, 18px)"
+      }}
     >
       {label}
+    </motion.div>
+  );
+}
+
+/* -------------------------------------------- */
+/* SPACE BAR */
+/* -------------------------------------------- */
+function Spacebar({ onPress }) {
+  return (
+    <motion.div
+      whileTap={{ scale: 0.9 }}
+      onClick={onPress}
+      className="
+        bg-[#3a3a3c]
+        rounded-xl
+        flex justify-center items-center
+        text-white font-semibold
+      "
+      style={{
+        flex: 1,
+        height: "clamp(42px, 6vh, 56px)",
+        marginLeft: 10,
+        marginRight: 10,
+        fontSize: "clamp(15px, 2vh, 20px)"
+      }}
+    >
+      space
     </motion.div>
   );
 }

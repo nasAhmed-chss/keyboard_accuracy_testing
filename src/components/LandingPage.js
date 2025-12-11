@@ -111,15 +111,15 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
-              onClick={() => window.open('/research.pdf', '_blank')}
+              onClick={onStartTest}
               className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                Explore the Research
+                View the Demo
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
-              onClick={onStartTest}
+              onClick={() => window.open('/research.pdf', '_blank')}
               className="px-8 py-4 border-2 border-purple-500/50 rounded-full font-semibold text-lg hover:bg-purple-500/10 transition-all duration-300 backdrop-blur-sm">
-                View Demo
+                Explore Research
               </button>
             </div>
 
