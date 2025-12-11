@@ -2,8 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TEST_WORDS } from '../data/words';
+import IOSKeyboard from "./IOSKeyboard";
 
 function TestingPage({ onComplete, mode = 'adaptive' }) {
+    const MAX_KEY_SCALE = 1.3;
+    const SCALE_STEP = 0.1;
+
     const [currentWord, setCurrentWord] = useState('');
     const [targetWord, setTargetWord] = useState('');
     const [wordIndex, setWordIndex] = useState(0);
@@ -26,6 +30,25 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+    useEffect(() => {
+    const values = Object.values(keySizes);
+    if (values.length === 0) return;
+
+    const maxScale = Math.max(...values);
+    const MAX_KEY_SCALE = 1.3;
+
+    if (maxScale > MAX_KEY_SCALE) {
+        setKeySizes(prev => {
+            const normalized = {};
+            for (let k in prev) {
+                normalized[k] = prev[k] > 1 ? Math.max(1, prev[k] * 0.95) : 1;
+
+            }
+            return normalized;
+        });
+    }
+}, [keySizes]);
+
 
 
     const keyboardLayout = [
@@ -58,6 +81,21 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 [expected]: Math.min((prev[expected] || 1) + 0.1, 1.3)
             }));
         }
+        // Correct press → shrink ONLY if the key is larger than 1.0
+    if (mode === "adaptive" && isCorrect) {
+        setKeySizes(prev => {
+            const current = prev[key] || 1;
+
+            // Do nothing if key is already normal
+            if (current <= 1) return prev;
+
+            return {
+                ...prev,
+                [key]: Math.max(current - 0.05, 1)
+            };
+        });
+    }
+
 
         if (newWord.length === targetWord.length) {
             setTimeout(() => {
@@ -100,6 +138,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
     };
 
     return (
+        
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -124,7 +163,9 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
 
-            <div className="max-w-2xl w-full space-y-10 relative z-10">
+            <div className="max-w-2xl w-full space-y-10 relative z-10 flex-1 overflow-y-auto pb-[300px]">
+
+
 
                 {/* TOP LABEL */}
                <motion.div
@@ -169,6 +210,25 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                         ))}
                     </div>
                 </div>
+                {/* LIVE STATS */}
+                <div className="grid grid-cols-3 gap-4">
+                    {[
+                        { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
+                        { label: "WPM", value: calcWPM(), color: "text-purple-300" },
+                        { label: "Errors", value: stats.errors, color: "text-red-300" }
+                    ].map((s, i) => (
+                        <div
+                            key={i}
+                            className="
+                                bg-white/10 backdrop-blur-xl p-2 rounded-2xl text-center
+                                border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
+                            "
+                        >
+                            <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
+                            <div className="text-sm text-gray-300">{s.label}</div>
+                        </div>
+                    ))}
+                </div>
 
                 {/* WORD CARD */}
                 <motion.div
@@ -205,125 +265,38 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     </div>
                 </motion.div>
 
-                {/* KEYBOARD */}
-<div className="
-    bg-white/10 backdrop-blur-xl rounded-3xl p-4 pb-6
-    border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
-    w-full max-w-lg mx-auto
-">
-    <div className="space-y-3">
 
-        {/* ROW 1 */}
-        <div className="flex justify-center gap-2">
-            {keyboardLayout[0].map(key => {
-                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
-                return (
-                    <motion.button
-                        key={key}
-                        whileTap={{ scale: 0.9 }}
-                        animate={{ scale }}
-                        onClick={() => handleKeyPress(key)}
-                        className="
-                            uppercase font-semibold rounded-2xl
-                            text-gray-200 
-                            bg-[#1e1e22] hover:bg-[#2c2c31]
-                            shadow-md shadow-black/40
-                            transition-all
-                        "
-                        style={{
-                            width: `${44 * scale}px`,
-                            height: `${52 * scale}px`,
-                            fontSize: `${20 * scale}px`,
-                        }}
-                    >
-                        {key}
-                    </motion.button>
-                );
-            })}
-        </div>
+                     {/*Keyboard */}   
+             <div
+                className="
+                    fixed bottom-0 left-0 right-0 w-full px-2 pb-6
+                    backdrop-blur-xl
+                    border-t border-white/10
 
-        {/* ROW 2 (indented like iPhone) */}
-        <div className="flex justify-center gap-2 pl-6"> 
-            {keyboardLayout[1].map(key => {
-                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
-                return (
-                    <motion.button
-                        key={key}
-                        whileTap={{ scale: 0.9 }}
-                        animate={{ scale }}
-                        onClick={() => handleKeyPress(key)}
-                        className="
-                            uppercase font-semibold rounded-2xl
-                            text-gray-200 
-                            bg-[#1e1e22] hover:bg-[#2c2c31]
-                            shadow-md shadow-black/40
-                            transition-all
-                        "
-                        style={{
-                            width: `${48 * scale}px`,
-                            height: `${54 * scale}px`,
-                            fontSize: `${20 * scale}px`,
-                        }}
-                    >
-                        {key}
-                    </motion.button>
-                );
-            })}
-        </div>
+                    md:static md:w-[480px] md:mx-auto
+                    md:rounded-3xl 
+                    md:border md:border-white/10 
 
-        {/* ROW 3 (more indent like iPhone) */}
-        <div className="flex justify-center gap-2 pl-12">
-            {keyboardLayout[2].map(key => {
-                const scale = mode === "adaptive" ? (keySizes[key] || 1) : 1;
-                return (
-                    <motion.button
-                        key={key}
-                        whileTap={{ scale: 0.9 }}
-                        animate={{ scale }}
-                        onClick={() => handleKeyPress(key)}
-                        className="
-                            uppercase font-semibold rounded-2xl
-                            text-gray-200 
-                            bg-[#1e1e22] hover:bg-[#2c2c31]
-                            shadow-md shadow-black/40
-                            transition-all
-                        "
-                        style={{
-                            width: `${50 * scale}px`,
-                            height: `${56 * scale}px`,
-                            fontSize: `${20 * scale}px`,
-                        }}
-                    >
-                        {key}
-                    </motion.button>
-                );
-            })}
-        </div>
+                    /* Remove dark background */
+                    bg-transparent
 
-    </div>
-</div>
+                    /* Add neon underglow */
+                    md:shadow-[0_0_40px_10px_rgba(255,0,120,0.25)]
+                "
+                >
 
 
-                {/* LIVE STATS */}
-                <div className="grid grid-cols-3 gap-4">
-                    {[
-                        { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
-                        { label: "WPM", value: calcWPM(), color: "text-purple-300" },
-                        { label: "Errors", value: stats.errors, color: "text-red-300" }
-                    ].map((s, i) => (
-                        <div
-                            key={i}
-                            className="
-                                bg-white/10 backdrop-blur-xl p-4 rounded-2xl text-center
-                                border border-white/10 shadow-[0_0_20px_rgba(255,0,80,0.25)]
-                            "
-                        >
-                            <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
-                            <div className="text-sm text-gray-300">{s.label}</div>
-                        </div>
-                    ))}
-                </div>
 
+
+                <IOSKeyboard
+                    mode={mode}
+                    keySizes={keySizes}
+                    onKeyPress={handleKeyPress}
+                />
+            </div>
+
+
+                
                 {/* FINISH BUTTON */}
                 <motion.button
                     whileHover={{ scale: 1.03 }}

@@ -1,5 +1,5 @@
 // src/components/ResultsPage.js
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3, TrendingUp, Target, RotateCcw } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
@@ -9,20 +9,52 @@ function ResultsPage({ results, onRestart }) {
 
     const baseline = results.baseline;
     const adaptive = results.adaptive;
+    const [submitted, setSubmitted] = useState(false);
 
     const name = adaptive?.name || baseline?.name || "User";
 
     useEffect(() => {
-        if (!adaptive) return;
+    if (!adaptive) return;
 
-        supabase.from("typing_results").insert([{
-            name: adaptive.name,
-            accuracy: adaptive.accuracy,
-            wpm: adaptive.wpm,
-            errors: adaptive.errors,
-            key_errors: adaptive.keyErrors
-        }]);
-    }, [adaptive]);
+    const sendData = async () => {
+        console.log("Uploading to Supabase...");
+
+        const { data, error } = await supabase
+            .from("typing_results")
+            .insert([
+                {
+                    name: adaptive.name,
+                    accuracy: adaptive.accuracy,
+                    wpm: adaptive.wpm,
+                    errors: adaptive.errors,
+                    key_errors: adaptive.keyErrors,
+
+                    baseline_accuracy: baseline?.accuracy ?? null,
+                    baseline_wpm: baseline?.wpm ?? null,
+                    baseline_errors: baseline?.errors ?? null,
+
+                    delta_accuracy:
+                        baseline ? adaptive.accuracy - baseline.accuracy : null,
+                    delta_wpm:
+                        baseline ? adaptive.wpm - baseline.wpm : null,
+                    delta_errors:
+                        baseline ? baseline.errors - adaptive.errors : null,
+
+                    mode: adaptive.mode,
+                },
+            ]);
+
+        console.log("Insert data:", data);
+        console.log("Insert error:", error);
+    };
+
+    sendData();
+
+}, [adaptive]);
+
+  
+
+
 
     const accChange = adaptive && baseline ? adaptive.accuracy - baseline.accuracy : 0;
     const wpmChange = adaptive && baseline ? adaptive.wpm - baseline.wpm : 0;
