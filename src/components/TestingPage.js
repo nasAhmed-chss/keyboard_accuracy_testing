@@ -143,7 +143,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="
-                min-h-[var(--app-height)] p-6 flex flex-col items-center justify-center
+                min-h-[var(--app-height)] p-1 flex flex-col items-center justify-center
                 bg-gradient-to-br from-[#050507] via-[#0a0a12] to-[#170006]
                 text-gray-200 relative overflow-hidden
             "
@@ -165,10 +165,10 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
 
            <div
                 className="
-                    w-full                       /* FULL width on all screens */
+                    w-full                       /* FUL width on all screens */
                     max-w-none                   /* Remove max-width restriction */
                     md:max-w-2xl                 /* Only cap width on desktop */
-                    space-y-8
+                    space-y-6
                     relative z-10 
                     flex-1
                     overflow-y-auto
