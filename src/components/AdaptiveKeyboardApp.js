@@ -13,11 +13,10 @@ export default function AdaptiveKeyboardApp() {
     const [baselineResults, setBaselineResults] = useState(null);
     const [adaptiveResults, setAdaptiveResults] = useState(null);
     const [testPhase, setTestPhase] = useState('baseline'); 
-    // "baseline" → "adaptive"
 
 
     const handleStart = () => {
-        setCurrentPage('name');          // go to name step first
+        setCurrentPage('name');         
     };
 
     const handleNameSubmit = (name) => {
@@ -32,8 +31,8 @@ export default function AdaptiveKeyboardApp() {
 
     if (testPhase === 'baseline') {
         setBaselineResults(fullResults);
-        setTestPhase('adaptive');       // now run adaptive test
-        setCurrentPage('testing');      // go again
+        setTestPhase('adaptive');       
+        setCurrentPage('testing');    
     } else {
         setAdaptiveResults(fullResults);
         setCurrentPage('results');

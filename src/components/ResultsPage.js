@@ -70,7 +70,7 @@ function ResultsPage({ results, onRestart }) {
                 text-gray-200 relative overflow-hidden
             "
         >
-            {/* GRID */}
+
             <div className="absolute inset-0 opacity-[0.12] pointer-events-none"
                 style={{
                     backgroundImage:
@@ -80,14 +80,13 @@ function ResultsPage({ results, onRestart }) {
                 }}
             />
 
-            {/* RED GLOW */}
+
             <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen">
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
 
             <div className="max-w-5xl w-full space-y-12 relative z-10">
 
-                {/* HEADER */}
                 <motion.div
                     initial={{ y: -15, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -102,10 +101,8 @@ function ResultsPage({ results, onRestart }) {
                     </p>
                 </motion.div>
 
-                {/* RESULT CARDS */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                    {/* ACCURACY */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -127,7 +124,6 @@ function ResultsPage({ results, onRestart }) {
                         )}
                     </motion.div>
 
-                    {/* WPM */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -149,7 +145,6 @@ function ResultsPage({ results, onRestart }) {
                         )}
                     </motion.div>
 
-                    {/* ERRORS */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -172,7 +167,6 @@ function ResultsPage({ results, onRestart }) {
                     </motion.div>
                 </div>
 
-                {/* RESTART BUTTON */}
                 <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}

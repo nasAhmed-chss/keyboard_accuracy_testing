@@ -26,7 +26,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
     useEffect(() => {
         setTargetWord(testWords[0]);
     }, []);
-    // Force page to load from the top on iPhone Safari
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -81,12 +81,11 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 [expected]: Math.min((prev[expected] || 1) + 0.1, 1.3)
             }));
         }
-        // Correct press → shrink ONLY if the key is larger than 1.0
+
     if (mode === "adaptive" && isCorrect) {
         setKeySizes(prev => {
             const current = prev[key] || 1;
 
-            // Do nothing if key is already normal
             if (current <= 1) return prev;
 
             return {
@@ -148,7 +147,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 text-gray-200 relative overflow-hidden
             "
         >
-            {/* GRID */}
+
             <div className="absolute inset-0 opacity-[0.12] pointer-events-none"
                 style={{
                     backgroundImage:
@@ -158,7 +157,6 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                 }}
             />
 
-            {/* RED GLOW */}
             <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen">
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
@@ -179,7 +177,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
 
 
 
-                {/* TOP LABEL */}
+
                <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -196,15 +194,12 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             >
                 {mode === "baseline" ? "Baseline Typing Test" : "Adaptive Typing Test"}
 
-                {/* Underline glow */}
                 <div className="mx-auto mt-3 w-96 h-[3px] rounded-full 
                     bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 
                     shadow-[0_0_18px_rgba(255,60,120,0.7)]">
                 </div>
             </motion.div>
 
-
-                {/* PROGRESS */}
                 <div className="flex justify-between text-gray-300 text-xs sm:text-sm whitespace-nowrap">
                     <div>Word {wordIndex + 1} of {testWords.length}</div>
                     <div className="flex gap-2">
@@ -222,7 +217,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                         ))}
                     </div>
                 </div>
-                {/* LIVE STATS */}
+
                 <div className="grid grid-cols-3 gap-4">
                     {[
                         { label: "Accuracy", value: `${calcAcc()}%`, color: "text-blue-300" },
@@ -242,7 +237,6 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     ))}
                 </div>
 
-                {/* WORD CARD */}
                 <motion.div
                     key={targetWord}
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -276,9 +270,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                         {currentWord || "_"}
                     </div>
                 </motion.div>
-
-
-                     {/*Keyboard */}   
+  
              <div
                 className="
                     fixed bottom-0 left-0 right-0 w-full px-2 pb-6
@@ -307,7 +299,7 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
                     onKeyPress={handleKeyPress}
                 />
             </div>
-            {/* DESKTOP PLACEHOLDER */}
+
             <div
                 className="
                     hidden md:flex
@@ -322,9 +314,6 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
             </div>
 
 
-
-                
-                {/* FINISH BUTTON */}
                 <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}

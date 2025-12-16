@@ -31,14 +31,14 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Hero Section with Background */}
+      
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
     backgroundImage: `url(${keyboard4k})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }}>
-        {/* Animated Background Overlay */}
+        
         <div 
           className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-black/60 to-blue-900/40"
           style={{
@@ -46,7 +46,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
           }}
         />
         
-        {/* Animated Grid Overlay */}
+       
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
             backgroundImage: `
@@ -58,7 +58,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
           }} />
         </div>
 
-        {/* Floating Particles */}
+ 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {[...Array(20)].map((_, i) => (
             <div
@@ -74,7 +74,7 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
           ))}
         </div>
 
-        {/* Hero Content */}
+        
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <div
             style={{
@@ -82,13 +82,12 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
               transform: `translateY(${scrollY * 0.2}px)`
             }}
           >
-            {/* Badge */}
+       
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-8 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span className="text-sm text-purple-300 font-medium">CSE 518 Research Project</span>
             </div>
 
-            {/* Main Headline */}
             <h1 className="text-7xl md:text-8xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-cyan-200 via-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(34,211,238,0.5)] animate-pulse">
                 Adaptive Key
@@ -97,18 +96,15 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
               <span className="text-white">Resizing</span>
             </h1>
 
-            {/* Subheadline */}
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               Revolutionary touchscreen keyboard that learns from your mistakes
               and adapts in real-time to reduce typing errors
             </p>
 
-            {/* Author Info */}
             <p className="text-gray-400 mb-12">
               By Naseer Ahmed • Dr. Xiaojun Bi • September 2025
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
               onClick={onStartTest}
@@ -123,7 +119,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
               </button>
             </div>
 
-            {/* Scroll Indicator */}
             <div className="mt-20 animate-bounce">
               <div className="w-6 h-10 border-2 border-purple-400 rounded-full mx-auto flex justify-center">
                 <div className="w-1 h-3 bg-purple-400 rounded-full mt-2 animate-pulse" />
@@ -133,7 +128,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
         </div>
       </div>
 
-      {/* Problem Statement Section */}
       <section className="relative py-32 bg-gradient-to-b from-black to-purple-950/20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -179,7 +173,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
             ))}
           </div>
 
-          {/* Current Solutions Callout */}
           <div className="mt-20 p-8 rounded-2xl bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-500/30">
             <p className="text-xl text-center text-gray-300">
               <span className="font-bold text-yellow-400">Existing solutions like autocorrect and predictive text</span> often create new problems by incorrectly altering intended words
@@ -188,7 +181,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
         </div>
       </section>
 
-      {/* Solution Section */}
       <section className="relative py-32 bg-gradient-to-b from-purple-950/20 to-black">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -204,7 +196,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
             </p>
           </div>
 
-          {/* How It Works */}
           <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
             <div>
               <h3 className="text-4xl font-bold mb-8">How It Works</h3>
@@ -244,7 +235,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
               </div>
             </div>
 
-            {/* Visual Demo Area */}
             <div className="relative">
               <div className="aspect-square rounded-3xl bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-purple-500/30 backdrop-blur-xl p-8 flex items-center justify-center">
                 <div className="text-center">
@@ -253,13 +243,12 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
                   <p className="text-sm text-gray-500 mt-2">Real-time adjustment based on user behavior</p>
                 </div>
               </div>
-              {/* Floating Elements */}
+
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-purple-500/20 rounded-full blur-xl animate-pulse" />
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '1s'}} />
             </div>
           </div>
 
-          {/* Example Scenario */}
           <div className="p-8 rounded-2xl bg-gradient-to-r from-purple-900/30 to-blue-900/30 border border-purple-500/30 backdrop-blur-xl">
             <div className="flex items-start gap-6">
               <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
@@ -278,7 +267,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
         </div>
       </section>
 
-      {/* Research Methodology Section */}
       <section className="relative py-32 bg-gradient-to-b from-black to-blue-950/20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
@@ -326,7 +314,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
         </div>
       </section>
 
-      {/* Expected Impact Section */}
       <section className="relative py-32 bg-gradient-to-b from-blue-950/20 to-black">
         <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-5xl md:text-6xl font-bold mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight pb-2">
@@ -335,8 +322,8 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
             {[
-              { value: "↓ 40%", label: "Error Reduction", color: "from-green-400 to-emerald-400" },
-              { value: "↑ 25%", label: "Typing Confidence", color: "from-blue-400 to-cyan-400" },
+              { value: "↓ 10%", label: "Error Reduction", color: "from-green-400 to-emerald-400" },
+              { value: "↑ 15%", label: "Typing Confidence", color: "from-blue-400 to-cyan-400" },
               { value: "→ 100%", label: "Speed Maintained", color: "from-purple-400 to-pink-400" }
             ].map((stat, idx) => (
               <div key={idx} className="p-8 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 hover:scale-105 transition-transform duration-300">
@@ -354,7 +341,6 @@ export default function AdaptiveKeyboardLanding({ onStartTest }) {
         </div>
       </section>
 
-      {/* Footer CTA */}
       <section className="relative py-20 bg-gradient-to-t from-purple-900/20 to-black">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">

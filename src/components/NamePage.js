@@ -29,7 +29,6 @@ function NamePage({ onSubmitName }) {
             "
         >
 
-            {/* Subtle grid */}
             <div className="absolute inset-0 opacity-[0.15] pointer-events-none"
                 style={{
                     backgroundImage:
@@ -39,12 +38,10 @@ function NamePage({ onSubmitName }) {
                 }}
             />
 
-            {/* Red glow */}
             <div className="absolute inset-0 pointer-events-none mix-blend-screen opacity-40">
                 <img src="/images/red-bokeh.png" className="w-full h-full object-cover" />
             </div>
 
-            {/* Floating glass card */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -60,21 +57,21 @@ function NamePage({ onSubmitName }) {
                     hover:shadow-[0_0_55px_rgba(255,0,120,0.4)]
                 "
             >
-                {/* Title */}
+              
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-red-300 to-pink-300 bg-clip-text text-transparent drop-shadow-lg mb-4 text-center">
                     Before we begin…
                 </h2>
 
-                {/* Modern Test Description */}
+      
                 <p className="text-gray-200/90 mb-6 text-center leading-relaxed text-sm">
                     This study includes <strong className="text-red-300">two short typing tests</strong> designed  
                     to measure how adaptive keyboards can improve typing performance.
                 </p>
 
-                {/* Flow Diagram */}
+         
                 <div className="space-y-5 mb-8">
 
-                    {/* Step 1 */}
+      
                     <div className="flex items-start gap-4">
                         <div className="p-2 rounded-xl bg-red-400/20 border border-red-500/30">
                             <Layers className="w-6 h-6 text-red-300" />
@@ -88,12 +85,10 @@ function NamePage({ onSubmitName }) {
                         </p>
                     </div>
 
-                    {/* Arrow */}
                     <div className="flex justify-center opacity-60">
                         <ArrowDownCircle className="w-6 h-6 text-red-300" />
                     </div>
 
-                    {/* Step 2 */}
                     <div className="flex items-start gap-4">
                         <div className="p-2 rounded-xl bg-pink-400/20 border border-pink-500/30">
                             <Activity className="w-6 h-6 text-pink-300" />
@@ -106,22 +101,19 @@ function NamePage({ onSubmitName }) {
                         </p>
                     </div>
 
-                    {/* Summary Line */}
                     <p className="text-center text-gray-300 text-sm mt-4">
                         We'll then <strong className="text-red-300">compare your results </strong>  
                         to see how adaptive resizing affects performance.
                     </p>
                 </div>
 
-                {/* Form */}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
 
-                    {/* Input Label */}
                     <label className="block text-sm font-medium text-gray-200 tracking-wide">
                         Your Name
                     </label>
 
-                    {/* Futuristic Input */}
                     <motion.div
                         whileFocus={{ scale: 1.01 }}
                         className="
@@ -146,7 +138,6 @@ function NamePage({ onSubmitName }) {
                         <p className="text-xs text-red-400 -mt-4">Name is required.</p>
                     )}
 
-                    {/* Glowing Button */}
                     <motion.button
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.97 }}

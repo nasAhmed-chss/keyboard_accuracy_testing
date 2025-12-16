@@ -10,20 +10,20 @@ export default function IOSKeyboard({ onKeyPress, mode, keySizes }) {
     <div
       className="select-none mx-auto"
       style={{
-        width: "94vw",             // Scales perfectly across all iPhones
-        maxWidth: "500px",         // Prevents giant keys on Pro Max
+        width: "94vw",             
+        maxWidth: "500px",         
         paddingBottom: "env(safe-area-inset-bottom)"
       }}
     >
-      {/* Row 1 */}
+      
       <Row keys={TOP_ROW} onKeyPress={onKeyPress} mode={mode} keySizes={keySizes} />
 
-      {/* Row 2 (indented like iOS) */}
+      
       <div style={{ marginTop: 8, paddingLeft: "4vw" }}>
         <Row keys={MID_ROW} onKeyPress={onKeyPress} mode={mode} keySizes={keySizes} />
       </div>
 
-      {/* Row 3 */}
+  
       <div className="flex items-center justify-between mt-3">
 
         <SpecialKey label="⇧" />
@@ -35,7 +35,6 @@ export default function IOSKeyboard({ onKeyPress, mode, keySizes }) {
         <SpecialKey label="⌫" />
       </div>
 
-      {/* Bottom row (space bar) */}
       <div className="flex items-center justify-between mt-3">
 
         <SpecialKey label="🌐" />
@@ -48,9 +47,6 @@ export default function IOSKeyboard({ onKeyPress, mode, keySizes }) {
   );
 }
 
-/* -------------------------------------------- */
-/* ROW - PROPORTIONAL KEYS */
-/* -------------------------------------------- */
 function Row({ keys, onKeyPress, mode, keySizes }) {
   return (
     <div className="flex justify-between w-full">
@@ -67,9 +63,7 @@ function Row({ keys, onKeyPress, mode, keySizes }) {
   );
 }
 
-/* -------------------------------------------- */
-/* LETTER KEY */
-/* -------------------------------------------- */
+
 function Key({ label, onClick, mode, scaleValue }) {
   const scale = mode === "adaptive" ? scaleValue : 1;
 
@@ -85,8 +79,8 @@ function Key({ label, onClick, mode, scaleValue }) {
         text-white font-semibold
       "
       style={{
-        width: "8.5vw",                // Perfect for iPhones
-        maxWidth: 44,                  // Matches iOS key width
+        width: "8.5vw",              
+        maxWidth: 44,                  
         height: "clamp(42px, 6vh, 56px)",
         fontSize: "clamp(15px, 2vh, 20px)",
         margin: "0.5vw"
@@ -97,9 +91,7 @@ function Key({ label, onClick, mode, scaleValue }) {
   );
 }
 
-/* -------------------------------------------- */
-/* SPECIAL KEYS */
-/* -------------------------------------------- */
+
 function SpecialKey({ label }) {
   return (
     <motion.div
@@ -122,9 +114,7 @@ function SpecialKey({ label }) {
   );
 }
 
-/* -------------------------------------------- */
-/* SPACE BAR */
-/* -------------------------------------------- */
+
 function Spacebar({ onPress }) {
   return (
     <motion.div
