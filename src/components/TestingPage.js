@@ -21,7 +21,11 @@ function TestingPage({ onComplete, mode = 'adaptive' }) {
     
     const [keySizes, setKeySizes] = useState({});
 
-    const testWords = TEST_WORDS.slice(0, 20);
+    const testWords = React.useMemo(
+  () => [...TEST_WORDS].sort(() => Math.random() - 0.5).slice(0, 20),
+  []
+);
+
 
     useEffect(() => {
         setTargetWord(testWords[0]);
